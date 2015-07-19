@@ -11,8 +11,8 @@ output:
 ## Loading and preprocessing the data
 #### Load Required Libraries 
 #### Set Global Options 
-#### Set Working Directory
-#### Read in Data file
+#### Set Local Working Directory
+#### Read in Data file from the Local Working Directory
 
 
 ```r
@@ -20,9 +20,9 @@ library(ggplot2)
 library(lattice)
 library(stats)
 
-setwd("C:/Users/E121977/Desktop/Coursera - Data Science/(5) Reproducible Research/RepData_PeerAssessment1/")
-
 options(scipen = 1) # This line of code removes default scientific notation options
+
+setwd("C:/Users/E121977/Desktop/Coursera - Data Science/(5) Reproducible Research/RepData_PeerAssessment1/")
 
 data <- read.csv("activity.csv")
 ```
@@ -47,8 +47,8 @@ mean.steps <- round(mean(as.numeric(tapply(data$steps, data$date, sum)), na.rm =
 median.steps <- round(median(as.numeric(tapply(data$steps, data$date, sum)), na.rm = TRUE),2)
 ```
 
-The mean number of steps taken per day is 10766.19 <br/>
-The median number of steps taken per day is 10765
+_**The mean number of steps taken per day is 10766.19**_  
+_**The median number of steps taken per day is 10765**_
 
 ## What is the average daily activity pattern?
 
@@ -72,7 +72,8 @@ data.most.active.interval <- data.interval.aggregated$interval[which(data.interv
 max.average.steps <- round(max(data.interval.aggregated$steps),1)
 ```
 
-The average maximum number of steps taken (206.2) occurs during the 5-minute interval starting at the 835th minute of the day.
+
+_**The average maximum number of steps taken (206.2) occurs during the 5-minute interval starting at the 835th minute of each daily cycle.  NOTE: Each daily 5 min cycle begins at "0" and ends at "2055".**_ 
 
 ## Imputing missing values
 
@@ -81,7 +82,7 @@ The average maximum number of steps taken (206.2) occurs during the 5-minute int
 ```r
 missing.values <- dim(data[!complete.cases(data),])[1]
 ```
-The total number of missing values in the dataset represented by "NA" is 2304
+_**The total number of missing values in the dataset represented by "NA" is 2304 **_
 
 #### Create a strategy for populating all missing values
 The strategy selected to replace all missing values is to replace the "NA" values in the occurance with the mean value for each interval.
@@ -130,10 +131,11 @@ new.mean.steps <- round(mean(as.numeric(tapply(data.newdata$steps, data.newdata$
 new.median.steps <- round(median(as.numeric(tapply(data.newdata$steps, data.newdata$date, sum)), na.rm = TRUE),2)
 ```
 
-The new mean number of steps taken per day is 10766.19 <br/>
-The new median number of steps taken per day is 10766.19
+_**The new mean number of steps taken per day is 10766.19 **_
 
-The new mean and median of the total number of steps per day after filling in the NA values is 10766.19 and 10766.19, respectively. The values are the same, and different from the original data set with the NAs in it, as we filled in the NAs in this data set with mean values. If we had chosen a different method, the mean and median would have been different results as well. 
+_**The new median number of steps taken per day is 10766.19**_
+
+_**The new mean and median of the total number of steps per day after filling in the NA values with the mean of the existing population is 10766.19 and 10766.19, respectively. Note that the values are the same, and different from the original data set.  This is the result fo filling in the NAs in this data set with mean values of the existing smaller population of known values. If we had chosen a different method, the mean and median would have generated different results but moist likely consistent values. **_
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -168,4 +170,9 @@ xyplot(avgSteps$meanOfSteps ~ avgSteps$interval | avgSteps$day, layout = c(1,2),
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png) 
+
+
+_**The short answer is yes, there are differences in activity bewteen the two types of days.**_
+
+_**Comments:  The new mean and median of the total number of steps per day after filling in the NA values with the mean of the existing population is 10766.19 and 10766.19, respectively. Note that the values are the same, and different from the original data set.  The amount of activitiy spikes earlier in the day for a weekday but appears to fluctiuate more thoughout a weekend day with a larger amount of total activity in thes two days compared top the amount of activity during a 5 day weekday peroid during the same 5 min time intervals.  This could be the result of missing data being populated into the weekend days more than the weekdays.  More analysis would be required to determine actual cause and effect. Since the steps recorded are for a full 24 hour cycle populating all NA with values also produces an undesirable skew of measured data.  The more desirable approach should have been to populate the data file where NA existed with zero values to better understand actual activity.**_
 
